@@ -1,0 +1,18 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #e0e0e0;
+}
+
+#model {
+    border-radius: 50px;
+    background: #e0e0e0;
+    box-shadow: 49px 49px 98px #bebebe,
+        -49px -49px 98px #ffffff;
+}
