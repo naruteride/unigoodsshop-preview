@@ -1,4 +1,3 @@
-// script.js
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
@@ -46,7 +45,7 @@ function STLViewer(models, elementID) {
     controls.autoRotateSpeed = .75;
 
     var scene = new THREE.Scene();
-    scene.add(new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 2));
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 5));
 
     var group = new THREE.Group();
     scene.add(group);
