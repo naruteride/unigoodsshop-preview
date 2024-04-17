@@ -3,22 +3,24 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 
-let mesh;
+let meshes = [];
 
 window.onload = function () {
-    STLViewer("Separated keycaps.stl", "model");
+    STLViewer(["text.stl", "keycap.stl"], "model");
 
     document.getElementById("changeColorButton").addEventListener("click", changeColor);
 }
 
 function changeColor() {
-    if (!mesh) return;
+    if (meshes.length === 0) return;
 
-    const newColor = Math.random() * 0xffffff;
-    mesh.material.color.setHex(newColor);
+    meshes.forEach(mesh => {
+        const newColor = Math.random() * 0xffffff;
+        mesh.material.color.setHex(newColor);
+    });
 }
 
-function STLViewer(model, elementID) {
+function STLViewer(models, elementID) {
     var elem = document.getElementById(elementID);
     var camera = new THREE.PerspectiveCamera(70, elem.clientWidth / elem.clientHeight, 1, 1000);
     var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -39,28 +41,41 @@ function STLViewer(model, elementID) {
 
     var scene = new THREE.Scene();
     scene.add(new THREE.HemisphereLight(0xffffff, 1.5));
-    new STLLoader().load(model, function (geometry) {
-        var material = new THREE.MeshPhongMaterial({
-            color: 0xff5533,
-            specular: 100,
-            shininess: 100
+
+    var group = new THREE.Group();
+    scene.add(group);
+
+    models.forEach((model, index) => {
+        new STLLoader().load(model, function (geometry) {
+            var material = new THREE.MeshPhongMaterial({
+                color: 0xffffff,
+                specular: 100,
+                shininess: 100
+            });
+            var mesh = new THREE.Mesh(geometry, material);
+            group.add(mesh);
+            meshes.push(mesh);
+
+            var middle = new THREE.Vector3();
+            geometry.computeBoundingBox();
+            geometry.boundingBox.getCenter(middle);
+            
+            var scale = 1;
+
+            // text.stl 파일을 z축 방향으로 3.8mm만큼 옮기는 부분 추가
+            if (index === 0) {
+                mesh.position.set(-middle.x * scale, -middle.y * scale, -middle.z * scale + 4.925);
+            } else {
+                mesh.position.set(-middle.x * scale, -middle.y * scale, -middle.z * scale);
+            }
+
+            camera.position.z = 25;
+            var animate = function () {
+                requestAnimationFrame(animate);
+                controls.update();
+                renderer.render(scene, camera);
+            }; 
+            animate();
         });
-        mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-        var middle = new THREE.Vector3();
-        geometry.computeBoundingBox();
-        geometry.boundingBox.getCenter(middle);
-        var largestDimension = Math.max(geometry.boundingBox.max.x,
-            geometry.boundingBox.max.y,
-            geometry.boundingBox.max.z);
-        var scale = 1 * largestDimension / Math.max(geometry.boundingBox.max.x - geometry.boundingBox.min.x, geometry.boundingBox.max.y - geometry.boundingBox.min.y, geometry.boundingBox.max.z - geometry.boundingBox.min.z);
-        mesh.scale.set(scale, scale, scale);
-        mesh.position.set(-middle.x * scale, -middle.y * scale, -middle.z * scale);
-        camera.position.z = largestDimension * 1.5;
-        var animate = function () {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }; animate();
     });
 }
