@@ -3,21 +3,27 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 
-let meshes = [];
+let keycapMesh, textMesh;
 
 window.onload = function () {
     STLViewer(["text.stl", "keycap.stl"], "model");
 
-    document.getElementById("changeColorButton").addEventListener("click", changeColor);
+    document.getElementById("changeKeycapColorButton").addEventListener("click", changeKeycapColor);
+    document.getElementById("changeTextColorButton").addEventListener("click", changeTextColor);
 }
 
-function changeColor() {
-    if (meshes.length === 0) return;
+function changeKeycapColor() {
+    if (!keycapMesh) return;
 
-    meshes.forEach(mesh => {
-        const newColor = Math.random() * 0xffffff;
-        mesh.material.color.setHex(newColor);
-    });
+    const newColor = Math.random() * 0xffffff;
+    keycapMesh.material.color.setHex(newColor);
+}
+
+function changeTextColor() {
+    if (!textMesh) return;
+
+    const newColor = Math.random() * 0xffffff;
+    textMesh.material.color.setHex(newColor);
 }
 
 function STLViewer(models, elementID) {
@@ -40,7 +46,7 @@ function STLViewer(models, elementID) {
     controls.autoRotateSpeed = .75;
 
     var scene = new THREE.Scene();
-    scene.add(new THREE.HemisphereLight(0xffffff, 1.5));
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 2));
 
     var group = new THREE.Group();
     scene.add(group);
@@ -54,15 +60,20 @@ function STLViewer(models, elementID) {
             });
             var mesh = new THREE.Mesh(geometry, material);
             group.add(mesh);
-            meshes.push(mesh);
+
+            // 각 모델에 대한 레퍼런스 저장
+            if (index === 0) {
+                textMesh = mesh;
+            } else {
+                keycapMesh = mesh;
+            }
 
             var middle = new THREE.Vector3();
             geometry.computeBoundingBox();
             geometry.boundingBox.getCenter(middle);
-            
+
             var scale = 1;
 
-            // text.stl 파일을 z축 방향으로 3.8mm만큼 옮기는 부분 추가
             if (index === 0) {
                 mesh.position.set(-middle.x * scale, -middle.y * scale, -middle.z * scale + 4.925);
             } else {
@@ -74,7 +85,7 @@ function STLViewer(models, elementID) {
                 requestAnimationFrame(animate);
                 controls.update();
                 renderer.render(scene, camera);
-            }; 
+            };
             animate();
         });
     });
