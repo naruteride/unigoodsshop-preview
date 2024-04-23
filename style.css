@@ -10,7 +10,31 @@ body {
     background: #e0e0e0;
 }
 
+body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+    "controllers model";
+    column-gap: 5rem;
+    align-items: center;
+}
+
+#controllers {
+    grid-area: controllers;
+    justify-self: end;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+#keycap-color {
+}
+#text-color {
+}
+
 #model {
+    grid-area: model;
     border-radius: 50px;
     background: #e0e0e0;
     box-shadow: 49px 49px 98px #bebebe,

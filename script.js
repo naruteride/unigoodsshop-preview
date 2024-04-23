@@ -26,9 +26,9 @@ function changeTextColor() {
 }
 
 function STLViewer(models, elementID) {
-    var elem = document.getElementById(elementID);
-    var camera = new THREE.PerspectiveCamera(70, elem.clientWidth / elem.clientHeight, 1, 1000);
-    var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    let elem = document.getElementById(elementID);
+    let camera = new THREE.PerspectiveCamera(70, elem.clientWidth / elem.clientHeight, 1, 1000);
+    let renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(elem.clientWidth, elem.clientHeight);
     elem.appendChild(renderer.domElement);
     window.addEventListener('resize', function () {
@@ -36,28 +36,30 @@ function STLViewer(models, elementID) {
         camera.aspect = elem.clientWidth / elem.clientHeight;
         camera.updateProjectionMatrix();
     }, false);
-    var controls = new OrbitControls(camera, renderer.domElement);
+    let controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.rotateSpeed = 0.5;
     controls.dampingFactor = 0.1;
     controls.enableZoom = true;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = .75;
+    controls.autoRotateSpeed = 0;
 
-    var scene = new THREE.Scene();
-    scene.add(new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 5));
+    let scene = new THREE.Scene();
+    let light = new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 5);
+    light.position.set(0, 10, 10);
+    scene.add(light);
 
-    var group = new THREE.Group();
+    let group = new THREE.Group();
     scene.add(group);
 
     models.forEach((model, index) => {
         new STLLoader().load(model, function (geometry) {
-            var material = new THREE.MeshPhongMaterial({
+            let material = new THREE.MeshPhongMaterial({
                 color: 0xffffff,
                 specular: 100,
                 shininess: 100
             });
-            var mesh = new THREE.Mesh(geometry, material);
+            let mesh = new THREE.Mesh(geometry, material);
             group.add(mesh);
 
             // 각 모델에 대한 레퍼런스 저장
@@ -67,20 +69,19 @@ function STLViewer(models, elementID) {
                 keycapMesh = mesh;
             }
 
-            var middle = new THREE.Vector3();
+            let middle = new THREE.Vector3();
+            console.log(middle)
             geometry.computeBoundingBox();
             geometry.boundingBox.getCenter(middle);
 
-            var scale = 1;
-
-            if (index === 0) {
-                mesh.position.set(-middle.x * scale, -middle.y * scale, -middle.z * scale + 4.925);
+            if (index == 0) {
+                mesh.position.set(-middle.x, -middle.y, -middle.z + 4.925);
             } else {
-                mesh.position.set(-middle.x * scale, -middle.y * scale, -middle.z * scale);
+                mesh.position.set(-middle.x, -middle.y, -middle.z);
             }
 
             camera.position.z = 25;
-            var animate = function () {
+            let animate = function () {
                 requestAnimationFrame(animate);
                 controls.update();
                 renderer.render(scene, camera);
