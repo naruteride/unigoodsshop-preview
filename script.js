@@ -42,11 +42,11 @@ function STLViewer(models, elementID) {
     controls.dampingFactor = 0.1;
     controls.enableZoom = true;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0;
+    controls.autoRotateSpeed = 0.25;
 
     let scene = new THREE.Scene();
     let light = new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 5);
-    light.position.set(0, 10, 10);
+    light.position.set(-5, 10, 10);
     scene.add(light);
 
     let group = new THREE.Group();
