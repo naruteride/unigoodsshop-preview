@@ -1,29 +1,74 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import colors from './colors.js';
 
 let keycapMesh, textMesh;
+const TRAY1 = document.getElementById('js-tray-slide1');
+const TRAY2 = document.getElementById('js-tray-slide2');
 
 window.onload = function () {
     STLViewer(["text.stl", "keycap.stl"], "model");
 
-    document.getElementById("changeKeycapColorButton").addEventListener("click", changeKeycapColor);
-    document.getElementById("changeTextColorButton").addEventListener("click", changeTextColor);
+    // keycap-color의 tray__swatch 클릭 이벤트 설정
+    document.querySelectorAll("#keycap-color .tray__swatch").forEach(swatch => {
+        swatch.addEventListener("click", function (e) {
+            handleSwatchClick(e.target);
+        });
+    });
+
+    // text-color의 tray__swatch 클릭 이벤트 설정
+    document.querySelectorAll("#text-color .tray__swatch").forEach(swatch => {
+        swatch.addEventListener("click", function (e) {
+            handleSwatchClick(e.target);
+        });
+    });
 }
 
-function changeKeycapColor() {
-    if (!keycapMesh) return;
+function handleSwatchClick(clickedSwatch) {
+    let color = colors[parseInt(clickedSwatch.dataset.key)];
+    let new_mtl;
 
-    const newColor = Math.random() * 0xffffff;
-    keycapMesh.material.color.setHex(newColor);
+    if (color.texture) {
+        let txt = new THREE.TextureLoader().load(color.texture);
+        txt.repeat.set(color.size[0], color.size[1], color.size[2]);
+        txt.wrapS = THREE.RepeatWrapping;
+        txt.wrapT = THREE.RepeatWrapping;
+
+        new_mtl = new THREE.MeshPhongMaterial({
+            map: txt,
+            shininess: color.shininess ? color.shininess : 10
+        });
+    } else {
+        new_mtl = new THREE.MeshPhongMaterial({
+            color: parseInt('0x' + color.color),
+            shininess: color.shininess ? color.shininess : 10
+        });
+    }
+
+    // 모델에 새 재질 적용
+    console.log(clickedSwatch.parentNode)
+    setMaterial(clickedSwatch.parentNode.id === "js-tray-slide1" ? keycapMesh : textMesh, new_mtl);
 }
 
-function changeTextColor() {
-    if (!textMesh) return;
+function buildColors(colors) {
+    for (let [i, color] of colors.entries()) {
+        let swatch = document.createElement('div');
+        swatch.classList.add('tray__swatch');
 
-    const newColor = Math.random() * 0xffffff;
-    textMesh.material.color.setHex(newColor);
+        if (color.texture) {
+            swatch.style.backgroundImage = "url(" + color.texture + ")";
+        } else {
+            swatch.style.background = "#" + color.color;
+        }
+
+        swatch.setAttribute('data-key', i);
+        TRAY1.append(swatch);
+        TRAY2.append(swatch.cloneNode(true));
+    }
 }
+
+buildColors(colors);
 
 function STLViewer(models, elementID) {
     let elem = document.getElementById(elementID);
@@ -88,5 +133,11 @@ function STLViewer(models, elementID) {
             };
             animate();
         });
+    });
+}
+
+function setMaterial(parent, mtl) {
+    parent.traverse(o => {
+            o.material = mtl;
     });
 }

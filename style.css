@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    touch-action: manipulation;
 }
 
 html,
@@ -15,8 +16,8 @@ body {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
     grid-template-areas:
-    "controllers model";
-    column-gap: 5rem;
+        "controllers model";
+    column-gap: 10rem;
     align-items: center;
 }
 
@@ -26,11 +27,8 @@ body {
     width: 500px;
     display: flex;
     flex-direction: column;
-}
-
-#keycap-color {
-}
-#text-color {
+    gap: 5rem;
+    overflow-x: hidden;
 }
 
 #model {
@@ -39,4 +37,24 @@ body {
     background: #e0e0e0;
     box-shadow: 49px 49px 98px #bebebe,
         -49px -49px 98px #ffffff;
+}
+
+.tray__slide {
+    display: flex;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tray__swatch {
+    transition: 0.1s ease-in;
+    height: 50px;
+    min-width: 50px;
+    flex: 1;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    background-size: cover;
+    background-position: center;
+}
+
+.tray__swatch:nth-child(5n+5) {
+    margin-right: 20px;
 }
