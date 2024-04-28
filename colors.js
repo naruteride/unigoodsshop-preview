@@ -227,7 +227,7 @@ const colors = [
 
     {
         color: '438AAC'
-    }
+    },
 ];
 
 export default colors;
