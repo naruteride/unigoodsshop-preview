@@ -25,6 +25,10 @@ window.onload = function () {
     });
 }
 
+/**
+ * 선택한 스와치에 대해 클릭 이벤트를 처리한다.
+ * @param {HTMLElement} clickedSwatch - 클릭한 스와치 요소
+ */
 function handleSwatchClick(clickedSwatch) {
     let color = colors[parseInt(clickedSwatch.dataset.key)];
     let new_mtl;
@@ -51,6 +55,10 @@ function handleSwatchClick(clickedSwatch) {
     setMaterial(clickedSwatch.parentNode.id === "js-tray-slide1" ? keycapMesh : textMesh, new_mtl);
 }
 
+/**
+ * 컬러 스와치를 생성하고 트레이에 추가한다.
+ * @param {Array<object>} colors - 컬러 데이터의 배열
+ */
 function buildColors(colors) {
     for (let [i, color] of colors.entries()) {
         let swatch = document.createElement('div');
@@ -70,6 +78,11 @@ function buildColors(colors) {
 
 buildColors(colors);
 
+/**
+ * 모델과 컬러 스와치를 로드하고 관리하는 3D 뷰어를 생성한다.
+ * @param {string[]} models - STL 파일 경로의 배열
+ * @param {string} elementID - 3D 모델을 표시할 HTML 요소의 ID
+ */
 function STLViewer(models, elementID) {
     let elem = document.getElementById(elementID);
     let camera = new THREE.PerspectiveCamera(70, elem.clientWidth / elem.clientHeight, 1, 1000);
@@ -136,6 +149,11 @@ function STLViewer(models, elementID) {
     });
 }
 
+/**
+ * 모델의 재질을 설정한다.
+ * @param {THREE.Object3D} parent - 재질을 적용할 모델
+ * @param {THREE.Material} mtl - 새로운 재질
+ */
 function setMaterial(parent, mtl) {
     parent.traverse(o => {
             o.material = mtl;
