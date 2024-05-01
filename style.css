@@ -1,4 +1,23 @@
+@font-face {
+    font-family: 'SeoulNamsanB';
+    src: url('./fonts/서울남산 장체B.ttf') format('truetype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'SeoulNamsanM';
+    src: url('./fonts/서울남산 장체M.ttf') format('truetype');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'SeoulNamsanL';
+    src: url('./fonts/서울남산 장체L.ttf') format('truetype');
+    font-weight: lighter;
+}
+
 * {
+    font-family: 'SeoulNamsanM';
     box-sizing: border-box;
     touch-action: manipulation;
 }
