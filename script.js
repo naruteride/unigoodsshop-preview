@@ -8,7 +8,7 @@ const TRAY1 = document.getElementById('js-tray-slide1');
 const TRAY2 = document.getElementById('js-tray-slide2');
 
 window.onload = function () {
-    STLViewer(["text.stl", "keycap.stl"], "model");
+    STLViewer(["./models/text.stl", "./models/keycap.stl"], "model");
 
     // keycap-color의 tray__swatch 클릭 이벤트 설정
     document.querySelectorAll("#keycap-color .tray__swatch").forEach(swatch => {
@@ -156,6 +156,6 @@ function STLViewer(models, elementID) {
  */
 function setMaterial(parent, mtl) {
     parent.traverse(o => {
-            o.material = mtl;
+        o.material = mtl;
     });
 }
