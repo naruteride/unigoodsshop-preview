@@ -158,7 +158,8 @@ function STLViewer(models, elementID) {
             } else if (index == 1) {
                 mesh.position.set(-middle.x, -middle.y, -middle.z);
             } else if (index == 2) {
-                mesh.position.set(-middle.x, -middle.y, -middle.z);
+                mesh.position.set(-middle.x, middle.z + 1.548, -middle.y - 14);
+                mesh.rotation.x = Math.PI / 2;
             }
 
             camera.position.z = 25;
