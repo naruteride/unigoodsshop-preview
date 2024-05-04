@@ -158,7 +158,9 @@ function STLViewer(models, elementID) {
             } else if (index == 1) {
                 mesh.position.set(-middle.x, -middle.y, -middle.z);
             } else if (index == 2) {
-                mesh.position.set(-middle.x, middle.z + 1.548, -middle.y - 14);
+                let amount = 1
+                mesh.scale.set(amount, amount, amount);
+                mesh.position.set((-middle.x) * amount, (middle.z + 1.548) * amount, (-middle.y - 14) * amount);
                 mesh.rotation.x = Math.PI / 2;
             }
 
