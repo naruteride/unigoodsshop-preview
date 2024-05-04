@@ -3,10 +3,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import colors from './colors.js';
 
-let keycapMesh, textMesh, switchBoardMesh;
-const TRAY1 = document.getElementById('js-tray-slide1');
-const TRAY2 = document.getElementById('js-tray-slide2');
-const TRAY3 = document.getElementById('js-tray-slide3');
+const TRAYS = [
+    { id: 'js-tray-slide1', property: 'keycapMesh', mesh: THREE.Mesh },
+    { id: 'js-tray-slide2', property: 'textMesh', mesh: THREE.Mesh },
+    { id: 'js-tray-slide3', property: 'switchBoardMesh', mesh: THREE.Mesh }
+];
 
 const STLModelFiles = [
     "./models/text.stl",
@@ -17,24 +18,11 @@ const STLModelFiles = [
 window.onload = function () {
     STLViewer(STLModelFiles, "model");
 
-    // keycap-color의 tray__swatch 클릭 이벤트 설정
-    document.querySelectorAll("#keycap-color .tray__swatch").forEach(swatch => {
-        swatch.addEventListener("click", function (e) {
-            handleSwatchClick(e.target);
-        });
-    });
-
-    // text-color의 tray__swatch 클릭 이벤트 설정
-    document.querySelectorAll("#text-color .tray__swatch").forEach(swatch => {
-        swatch.addEventListener("click", function (e) {
-            handleSwatchClick(e.target);
-        });
-    });
-
-    // switch-board-color의 tray__swatch 클릭 이벤트 설정
-    document.querySelectorAll("#switch-board-color .tray__swatch").forEach(swatch => {
-        swatch.addEventListener("click", function (e) {
-            handleSwatchClick(e.target);
+    TRAYS.forEach(tray => {
+        document.querySelectorAll(`#${tray.id} .tray__swatch`).forEach(swatch => {
+            swatch.addEventListener("click", function (e) {
+                handleSwatchClick(e.target, tray.mash);
+            });
         });
     });
 }
@@ -45,7 +33,7 @@ window.onload = function () {
  */
 function handleSwatchClick(clickedSwatch) {
     let color = colors[parseInt(clickedSwatch.dataset.key)];
-    let new_mtl;
+    let newMtl;
 
     if (color.texture) {
         let txt = new THREE.TextureLoader().load(color.texture);
@@ -53,24 +41,22 @@ function handleSwatchClick(clickedSwatch) {
         txt.wrapS = THREE.RepeatWrapping;
         txt.wrapT = THREE.RepeatWrapping;
 
-        new_mtl = new THREE.MeshPhongMaterial({
+        newMtl = new THREE.MeshPhongMaterial({
             map: txt,
             shininess: color.shininess ? color.shininess : 10
         });
     } else {
-        new_mtl = new THREE.MeshPhongMaterial({
+        newMtl = new THREE.MeshPhongMaterial({
             color: parseInt('0x' + color.color),
             shininess: color.shininess ? color.shininess : 10
         });
     }
 
-    if (clickedSwatch.parentNode.id == "js-tray-slide1") {
-        setMaterial(keycapMesh, new_mtl);
-    } else if (clickedSwatch.parentNode.id == "js-tray-slide2") {
-        setMaterial(textMesh, new_mtl);
-    } else if (clickedSwatch.parentNode.id == "js-tray-slide3") {
-        setMaterial(switchBoardMesh, new_mtl);
-    }
+    TRAYS.forEach(tray => {
+        if (clickedSwatch.parentNode.id === tray.id) {
+            setMaterial(tray.mash, newMtl);
+        }
+    });
 }
 
 /**
@@ -89,9 +75,11 @@ function buildColors(colors) {
         }
 
         swatch.setAttribute('data-key', i);
-        TRAY1.append(swatch);
-        TRAY2.append(swatch.cloneNode(true));
-        TRAY3.append(swatch.cloneNode(true));
+
+
+        TRAYS.forEach(tray => {
+            document.querySelector(`#${tray.id}`).append(swatch.cloneNode(true));
+        })
     }
 }
 
@@ -142,11 +130,11 @@ function STLViewer(models, elementID) {
 
             // 각 모델에 대한 레퍼런스 저장
             if (index == 0) {
-                textMesh = mesh;
+                TRAYS[0].mash = mesh;
             } else if (index == 1) {
-                keycapMesh = mesh;
+                TRAYS[1].mash = mesh;
             } else if (index == 2) {
-                switchBoardMesh = mesh;
+                TRAYS[2].mash = mesh;
             }
 
             let middle = new THREE.Vector3();
