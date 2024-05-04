@@ -3,12 +3,19 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import colors from './colors.js';
 
-let keycapMesh, textMesh;
+let keycapMesh, textMesh, switchBoardMesh;
 const TRAY1 = document.getElementById('js-tray-slide1');
 const TRAY2 = document.getElementById('js-tray-slide2');
+const TRAY3 = document.getElementById('js-tray-slide3');
+
+const STLModelFiles = [
+    "./models/text.stl",
+    "./models/keycap.stl",
+    "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_4slots_switch_board.stl",
+]
 
 window.onload = function () {
-    STLViewer(["./models/text.stl", "./models/keycap.stl"], "model");
+    STLViewer(STLModelFiles, "model");
 
     // keycap-color의 tray__swatch 클릭 이벤트 설정
     document.querySelectorAll("#keycap-color .tray__swatch").forEach(swatch => {
@@ -19,6 +26,13 @@ window.onload = function () {
 
     // text-color의 tray__swatch 클릭 이벤트 설정
     document.querySelectorAll("#text-color .tray__swatch").forEach(swatch => {
+        swatch.addEventListener("click", function (e) {
+            handleSwatchClick(e.target);
+        });
+    });
+
+    // switch-board-color의 tray__swatch 클릭 이벤트 설정
+    document.querySelectorAll("#switch-board-color .tray__swatch").forEach(swatch => {
         swatch.addEventListener("click", function (e) {
             handleSwatchClick(e.target);
         });
@@ -50,9 +64,13 @@ function handleSwatchClick(clickedSwatch) {
         });
     }
 
-    // 모델에 새 재질 적용
-    console.log(clickedSwatch.parentNode)
-    setMaterial(clickedSwatch.parentNode.id === "js-tray-slide1" ? keycapMesh : textMesh, new_mtl);
+    if (clickedSwatch.parentNode.id == "js-tray-slide1") {
+        setMaterial(keycapMesh, new_mtl);
+    } else if (clickedSwatch.parentNode.id == "js-tray-slide2") {
+        setMaterial(textMesh, new_mtl);
+    } else if (clickedSwatch.parentNode.id == "js-tray-slide3") {
+        setMaterial(switchBoardMesh, new_mtl);
+    }
 }
 
 /**
@@ -73,6 +91,7 @@ function buildColors(colors) {
         swatch.setAttribute('data-key', i);
         TRAY1.append(swatch);
         TRAY2.append(swatch.cloneNode(true));
+        TRAY3.append(swatch.cloneNode(true));
     }
 }
 
@@ -85,8 +104,9 @@ buildColors(colors);
  */
 function STLViewer(models, elementID) {
     let elem = document.getElementById(elementID);
-    let camera = new THREE.PerspectiveCamera(70, elem.clientWidth / elem.clientHeight, 1, 1000);
+    let camera = new THREE.PerspectiveCamera(90, elem.clientWidth / elem.clientHeight, 1, 1000);
     let renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
     renderer.setSize(elem.clientWidth, elem.clientHeight);
     elem.appendChild(renderer.domElement);
     window.addEventListener('resize', function () {
@@ -121,20 +141,23 @@ function STLViewer(models, elementID) {
             group.add(mesh);
 
             // 각 모델에 대한 레퍼런스 저장
-            if (index === 0) {
+            if (index == 0) {
                 textMesh = mesh;
-            } else {
+            } else if (index == 1) {
                 keycapMesh = mesh;
+            } else if (index == 2) {
+                switchBoardMesh = mesh;
             }
 
             let middle = new THREE.Vector3();
-            console.log(middle)
             geometry.computeBoundingBox();
             geometry.boundingBox.getCenter(middle);
 
             if (index == 0) {
                 mesh.position.set(-middle.x, -middle.y, -middle.z + 4.925);
-            } else {
+            } else if (index == 1) {
+                mesh.position.set(-middle.x, -middle.y, -middle.z);
+            } else if (index == 2) {
                 mesh.position.set(-middle.x, -middle.y, -middle.z);
             }
 
