@@ -4,9 +4,9 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import colors from './colors.js';
 
 const TRAYS = [
-    { id: 'js-tray-slide1', property: 'keycapMesh', mesh: THREE.Mesh },
-    { id: 'js-tray-slide2', property: 'textMesh', mesh: THREE.Mesh },
-    { id: 'js-tray-slide3', property: 'switchBoardMesh', mesh: THREE.Mesh }
+    { id: 'js-tray-slide1', mesh: THREE.Mesh },
+    { id: 'js-tray-slide2', mesh: THREE.Mesh },
+    { id: 'js-tray-slide3', mesh: THREE.Mesh }
 ];
 
 const STLModelFiles = [
