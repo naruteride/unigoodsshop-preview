@@ -6,13 +6,19 @@ import colors from './colors.js';
 const TRAYS = [
     { id: 'js-tray-slide1', mesh: THREE.Mesh },
     { id: 'js-tray-slide2', mesh: THREE.Mesh },
-    { id: 'js-tray-slide3', mesh: THREE.Mesh }
+    { id: 'js-tray-slide3', mesh: THREE.Mesh },
+    { id: 'js-tray-slide2', mesh: THREE.Mesh },
+    { id: 'js-tray-slide2', mesh: THREE.Mesh },
+    { id: 'js-tray-slide2', mesh: THREE.Mesh },
 ];
 
 const STLModelFiles = [
     "./models/text.stl",
     "./models/keycap.stl",
     "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_4slots_switch_board.stl",
+    "./models/keycap.stl",
+    "./models/keycap.stl",
+    "./models/keycap.stl",
 ]
 
 window.onload = function () {
@@ -141,15 +147,29 @@ function STLViewer(models, elementID) {
             geometry.computeBoundingBox();
             geometry.boundingBox.getCenter(middle);
 
+            let amount = 1;
+            let oneSpace = 18.5;
+
             if (index == 0) {
+                // 텍스트
                 mesh.position.set(-middle.x, -middle.y, -middle.z + 4.925);
             } else if (index == 1) {
-                mesh.position.set(-middle.x, -middle.y, -middle.z);
+                // 키캡
+                mesh.position.set(-middle.x + (oneSpace * 2) - (oneSpace / 2), -middle.y, -middle.z);
             } else if (index == 2) {
-                let amount = 1
+                // 스위치보드
                 mesh.scale.set(amount, amount, amount);
-                mesh.position.set((-middle.x) * amount, (middle.z + 1.548) * amount, (-middle.y - 14) * amount);
+                mesh.position.set((-middle.x) * amount - 1.5, (middle.z + 1.548) * amount, (-middle.y - 14) * amount);
                 mesh.rotation.x = Math.PI / 2;
+            } else if (index == 3) {
+                // 키캡
+                mesh.position.set(-middle.x + (oneSpace * 1) - (oneSpace / 2), -middle.y, -middle.z);
+            } else if (index == 4) {
+                // 키캡
+                mesh.position.set(-middle.x - (oneSpace * 1) + (oneSpace / 2), -middle.y, -middle.z);
+            } else if (index == 5) {
+                // 키캡
+                mesh.position.set(-middle.x - (oneSpace * 2) + (oneSpace / 2), -middle.y, -middle.z);
             }
 
             camera.position.z = 25;
