@@ -4,12 +4,12 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import colors from './colors.js';
 
 const TRAYS = [
-    { id: 'js-tray-slide1', mesh: THREE.Mesh },
-    { id: 'js-tray-slide2', mesh: THREE.Mesh },
-    { id: 'js-tray-slide3', mesh: THREE.Mesh },
-    { id: 'js-tray-slide2', mesh: THREE.Mesh },
-    { id: 'js-tray-slide2', mesh: THREE.Mesh },
-    { id: 'js-tray-slide2', mesh: THREE.Mesh },
+    { id: 'tray-text', mesh: THREE.Mesh },
+    { id: 'tray-keycap1', mesh: THREE.Mesh },
+    { id: 'tray-switch-board', mesh: THREE.Mesh },
+    { id: 'tray-keycap2', mesh: THREE.Mesh },
+    { id: 'tray-keycap3', mesh: THREE.Mesh },
+    { id: 'tray-keycap4', mesh: THREE.Mesh },
 ];
 
 const STLModelFiles = [
@@ -114,7 +114,7 @@ function STLViewer(models, elementID) {
     controls.dampingFactor = 0.1;
     controls.enableZoom = true;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.25;
+    controls.autoRotateSpeed = 0.1;
 
     let scene = new THREE.Scene();
     let light = new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 5);
@@ -135,6 +135,7 @@ function STLViewer(models, elementID) {
             group.add(mesh);
 
             // 각 모델에 대한 레퍼런스 저장
+            // ! + ! + ! + 이 부분 문제 + ! + ! + !
             if (index == 0) {
                 TRAYS[0].mash = mesh;
             } else if (index == 1) {
@@ -142,6 +143,8 @@ function STLViewer(models, elementID) {
             } else if (index == 2) {
                 TRAYS[2].mash = mesh;
             }
+            // TRAYS[index].mesh = mesh;
+            
 
             let middle = new THREE.Vector3();
             geometry.computeBoundingBox();
