@@ -192,6 +192,8 @@ function STLViewer(models, elementID) {
  * @param {THREE.Material} mtl - 새로운 재질
  */
 function setMaterial(parent, mtl) {
+    console.log(`parent: ${JSON.stringify(parent)}`);
+    console.log(`mtl: ${JSON.stringify(mtl)}`);
     parent.traverse(o => {
         o.material = mtl;
     });
