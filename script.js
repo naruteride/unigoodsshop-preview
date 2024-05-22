@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
 import colors from './colors.js';
 
+// 트레이와 해당하는 3D 메쉬를 정의한다.
 const TRAYS = [
     { id: 'tray-text', mesh: THREE.Mesh },
     { id: 'tray-keycap1', mesh: THREE.Mesh },
@@ -12,6 +13,7 @@ const TRAYS = [
     { id: 'tray-keycap4', mesh: THREE.Mesh },
 ];
 
+// STL 모델 파일의 경로를 정의한다.
 const STLModelFiles = [
     "./models/text.stl",
     "./models/keycap.stl",
@@ -22,8 +24,10 @@ const STLModelFiles = [
 ]
 
 window.onload = function () {
+    // STL 모델을 로드하고 3D 뷰어를 초기화한다.
     STLViewer(STLModelFiles, "model");
 
+    // 각 트레이의 색상 스와치에 클릭 이벤트 리스너를 추가한다.
     TRAYS.forEach(tray => {
         document.querySelectorAll(`#${tray.id} .tray__swatch`).forEach(swatch => {
             swatch.addEventListener("click", function (e) {
@@ -41,6 +45,7 @@ function handleSwatchClick(clickedSwatch) {
     let color = colors[parseInt(clickedSwatch.dataset.key)];
     let newMtl;
 
+    // 텍스처가 있는 색상인지 확인한다.
     if (color.texture) {
         let txt = new THREE.TextureLoader().load(color.texture);
         txt.repeat.set(color.size[0], color.size[1], color.size[2]);
@@ -58,6 +63,7 @@ function handleSwatchClick(clickedSwatch) {
         });
     }
 
+    // 클릭한 스와치가 속한 트레이의 메쉬에 새 재질을 적용한다.
     TRAYS.forEach(tray => {
         if (clickedSwatch.parentNode.id === tray.id) {
             setMaterial(tray.mash, newMtl);
@@ -82,13 +88,14 @@ function buildColors(colors) {
 
         swatch.setAttribute('data-key', i);
 
-
+        // 각 트레이에 스와치를 추가한다.
         TRAYS.forEach(tray => {
             document.querySelector(`#${tray.id}`).append(swatch.cloneNode(true));
         })
     }
 }
 
+// 컬러 스와치를 생성한다.
 buildColors(colors);
 
 /**
@@ -103,6 +110,8 @@ function STLViewer(models, elementID) {
 
     renderer.setSize(elem.clientWidth, elem.clientHeight);
     elem.appendChild(renderer.domElement);
+
+    // 창 크기 조정에 따라 렌더러와 카메라를 업데이트한다.
     window.addEventListener('resize', function () {
         renderer.setSize(elem.clientWidth, elem.clientHeight);
         camera.aspect = elem.clientWidth / elem.clientHeight;
@@ -124,6 +133,7 @@ function STLViewer(models, elementID) {
     let group = new THREE.Group();
     scene.add(group);
 
+    // 각 STL 모델을 로드하고 씬에 추가한다.
     models.forEach((model, index) => {
         new STLLoader().load(model, function (geometry) {
             let material = new THREE.MeshPhongMaterial({
@@ -134,7 +144,7 @@ function STLViewer(models, elementID) {
             let mesh = new THREE.Mesh(geometry, material);
             group.add(mesh);
 
-            // 각 모델에 대한 레퍼런스 저장
+            // // 각 모델에 대한 레퍼런스를 트레이 객체에 저장한다.
             // ! + ! + ! + 이 부분 문제 + ! + ! + !
             if (index == 0) {
                 TRAYS[0].mash = mesh;
@@ -145,7 +155,7 @@ function STLViewer(models, elementID) {
             }
             // TRAYS[index].mesh = mesh;
             
-
+            // 모델의 중심을 계산하여 올바른 위치에 배치한다.
             let middle = new THREE.Vector3();
             geometry.computeBoundingBox();
             geometry.boundingBox.getCenter(middle);
@@ -175,7 +185,10 @@ function STLViewer(models, elementID) {
                 mesh.position.set(-middle.x - (oneSpace * 2) + (oneSpace / 2), -middle.y, -middle.z);
             }
 
+            // 카메라의 초기 위치를 설정한다.
             camera.position.z = 25;
+
+            // 씬을 애니메이션하여 렌더링한다.
             let animate = function () {
                 requestAnimationFrame(animate);
                 controls.update();
@@ -194,6 +207,8 @@ function STLViewer(models, elementID) {
 function setMaterial(parent, mtl) {
     console.log(`parent: ${JSON.stringify(parent)}`);
     console.log(`mtl: ${JSON.stringify(mtl)}`);
+
+    // 재질을 설정하기 위해 모델의 각 구성 요소를 순회한다.
     parent.traverse(o => {
         o.material = mtl;
     });
