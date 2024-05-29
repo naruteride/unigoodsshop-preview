@@ -1,50 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D</title>
+    <title>3D 모델 뷰어</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
     <div id="controllers">
         <div id="text-color">
-            <p>글자</p>
-            <div id="tray-text" class="tray__slide"></div>
+            <p id="text-color-label">글자 색상 선택</p>
+            <div id="tray-text" class="tray__slide" aria-labelledby="text-color-label" role="region"></div>
         </div>
 
         <div id="keycap-color1">
-            <p>키캡1</p>
-            <div id="tray-keycap1" class="tray__slide"></div>
-            <p>키캡2</p>
-            <div id="tray-keycap2" class="tray__slide"></div>
-            <p>키캡3</p>
-            <div id="tray-keycap3" class="tray__slide"></div>
-            <p>키캡4</p>
-            <div id="tray-keycap4" class="tray__slide"></div>
+            <p id="keycap1-color-label">키캡1 색상 선택</p>
+            <div id="tray-keycap1" class="tray__slide" aria-labelledby="keycap1-color-label" role="region"></div>
+            <p id="keycap2-color-label">키캡2 색상 선택</p>
+            <div id="tray-keycap2" class="tray__slide" aria-labelledby="keycap2-color-label" role="region"></div>
+            <p id="keycap3-color-label">키캡3 색상 선택</p>
+            <div id="tray-keycap3" class="tray__slide" aria-labelledby="keycap3-color-label" role="region"></div>
+            <p id="keycap4-color-label">키캡4 색상 선택</p>
+            <div id="tray-keycap4" class="tray__slide" aria-labelledby="keycap4-color-label" role="region"></div>
         </div>
-        <!-- <div id="keycap-color2">
-            <p>키캡2</p>
-            <div id="tray-keycap2" class="tray__slide"></div>
-        </div>
-        <div id="keycap-color3">
-            <p>키캡3</p>
-            <div id="tray-keycap3" class="tray__slide"></div>
-        </div>
-        <div id="keycap-color4">
-            <p>키캡4</p>
-            <div id="tray-keycap4" class="tray__slide"></div>
-        </div> -->
 
         <div id="switch-board-color">
-            <p>스위치보드</p>
-            <div id="tray-switch-board" class="tray__slide"></div>
+            <p id="switch-board-color-label">스위치보드 색상 선택</p>
+            <div id="tray-switch-board" class="tray__slide" aria-labelledby="switch-board-color-label" role="region">
+            </div>
         </div>
+        <label for="text">텍스트 입력</label>
         <input placeholder="텍스트" value="test" id="text" />
     </div>
-    <div id="model" style="width: 500px; height: 500px"></div>
+    <div id="model" style="width: 500px; height: 500px" aria-label="3D 모델 뷰어" role="img"></div>
     <script type="module" src="script.js"></script>
 </body>
 
