@@ -5,22 +5,28 @@ import colors from './colors.js';
 
 // 트레이와 해당하는 3D 메쉬를 정의합니다.
 const TRAYS = [
-    { id: 'tray-text', mesh: null },
+    { id: 'tray-text1', mesh: null },
     { id: 'tray-keycap1', mesh: null },
     { id: 'tray-switch-board', mesh: null },
     { id: 'tray-keycap2', mesh: null },
     { id: 'tray-keycap3', mesh: null },
     { id: 'tray-keycap4', mesh: null },
+    { id: 'tray-text2', mesh: null },
+    { id: 'tray-text3', mesh: null },
+    { id: 'tray-text4', mesh: null }
 ];
 
 // STL 모델 파일의 경로를 정의합니다.
 const STLModelFiles = [
-    "./models/text.stl",
+    "./models/text/upper_F.stl",
     "./models/keycap.stl",
     "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_4slots_switch_board.stl",
     "./models/keycap.stl",
     "./models/keycap.stl",
     "./models/keycap.stl",
+    "./models/text/upper_F.stl",
+    "./models/text/upper_F.stl",
+    "./models/text/upper_F.stl"
 ]
 
 window.onload = function () {
@@ -159,6 +165,12 @@ function STLViewer(models, elementID) {
                 TRAYS[4].mesh = mesh;
             } else if (index == 5) {
                 TRAYS[5].mesh = mesh;
+            } else if (index == 6) {
+                TRAYS[6].mesh = mesh;
+            } else if (index == 7) {
+                TRAYS[7].mesh = mesh;
+            } else if (index == 8) {
+                TRAYS[8].mesh = mesh;
             }
 
             // 모델의 중심을 계산하여 올바른 위치에 배치합니다.
@@ -170,8 +182,8 @@ function STLViewer(models, elementID) {
             let oneSpace = 18.5;
 
             if (index == 0) {
-                // 텍스트
-                mesh.position.set(-middle.x, -middle.y, -middle.z + 4.925);
+                // 텍스트 1
+                mesh.position.set(-middle.x + (oneSpace * 2) - (oneSpace / 2), -middle.y, -middle.z + 4.925);
             } else if (index == 1) {
                 // 키캡 1
                 mesh.position.set(-middle.x + (oneSpace * 2) - (oneSpace / 2), -middle.y, -middle.z);
@@ -189,6 +201,15 @@ function STLViewer(models, elementID) {
             } else if (index == 5) {
                 // 키캡 4
                 mesh.position.set(-middle.x - (oneSpace * 2) + (oneSpace / 2), -middle.y, -middle.z);
+            } else if (index == 6) {
+                // 텍스트 2
+                mesh.position.set(-middle.x + (oneSpace * 1) - (oneSpace / 2), -middle.y, -middle.z + 4.925);
+            } else if (index == 7) {
+                // 텍스트 3
+                mesh.position.set(-middle.x - (oneSpace * 1) + (oneSpace / 2), -middle.y, -middle.z + 4.925);
+            } else if (index == 8) {
+                // 텍스트 4
+                mesh.position.set(-middle.x - (oneSpace * 2) + (oneSpace / 2), -middle.y, -middle.z + 4.925);
             }
 
             // 카메라의 초기 위치를 설정합니다.
