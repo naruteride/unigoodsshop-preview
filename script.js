@@ -125,7 +125,7 @@ function STLViewer(models, elementID) {
     controls.dampingFactor = 0.1;
     controls.enableZoom = true;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.1;
+    controls.autoRotateSpeed = 0;
 
     let scene = new THREE.Scene();
     let light = new THREE.HemisphereLight(0xffffff, 0xaaaaaa, 5);
