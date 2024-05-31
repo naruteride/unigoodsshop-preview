@@ -51,6 +51,10 @@ function selectSwitchBoardModel(slotCount) {
     }
 }
 
+function removeFirstCanvers() {
+    document.querySelector('canvas').remove();
+}
+
 // 초기 STL 파일 설정
 let initialSlotCount = 4; // 기본값은 4
 let initialSwitchBoardModel = selectSwitchBoardModel(initialSlotCount);
@@ -59,6 +63,9 @@ STLModelFiles[2] = initialSwitchBoardModel;
 // 슬롯 수를 선택하는 select 요소와 그 값을 처리하는 부분
 const slotCountSelect = document.getElementById('slot-count');
 slotCountSelect.addEventListener('change', function () {
+    // 생성되어있는 캔버스 제거
+    removeFirstCanvers();
+
     const selectedSlotCount = parseInt(this.value);
     const selectedSwitchBoardModel = selectSwitchBoardModel(selectedSlotCount);
     STLModelFiles[2] = selectedSwitchBoardModel;
