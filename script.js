@@ -20,7 +20,7 @@ const TRAYS = [
 const STLModelFiles = [
     "./models/text/upper_F.stl",
     "./models/keycap.stl",
-    "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_4slots_switch_board.stl",
+    "", // 스위치보드 모델은 초기에 비어있는 상태로 설정한다.
     "./models/keycap.stl",
     "./models/keycap.stl",
     "./models/keycap.stl",
@@ -28,6 +28,45 @@ const STLModelFiles = [
     "./models/text/upper_F.stl",
     "./models/text/upper_F.stl"
 ];
+
+// 스위치보드 모델 파일 경로를 선택하는 함수
+function selectSwitchBoardModel(slotCount) {
+    switch (slotCount) {
+        case 2:
+            return "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_2slots_switch_board.stl";
+        case 3:
+            return "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_3slots_switch_board.stl";
+        case 4:
+            return "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_4slots_switch_board.stl";
+        case 5:
+            return "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_5slots_switch_board.stl";
+        case 6:
+            return "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_6slots_switch_board.stl";
+        case 7:
+            return "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_7slots_switch_board.stl";
+        case 8:
+            return "./models/switch_board/open-style/switch_boardv2 v1_switch_boardv2 v1_8slots_switch_board.stl";
+        default:
+            return "";
+    }
+}
+
+// 초기 STL 파일 설정
+let initialSlotCount = 4; // 기본값은 4
+let initialSwitchBoardModel = selectSwitchBoardModel(initialSlotCount);
+STLModelFiles[2] = initialSwitchBoardModel;
+
+// 슬롯 수를 선택하는 select 요소와 그 값을 처리하는 부분
+const slotCountSelect = document.getElementById('slot-count');
+slotCountSelect.addEventListener('change', function () {
+    const selectedSlotCount = parseInt(this.value);
+    const selectedSwitchBoardModel = selectSwitchBoardModel(selectedSlotCount);
+    STLModelFiles[2] = selectedSwitchBoardModel;
+
+    // 변경된 모델 로드
+    STLViewer(STLModelFiles, "model");
+});
+
 
 /**
  * 각 트레이에 대응하는 메쉬를 저장한다.
