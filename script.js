@@ -51,7 +51,7 @@ function selectSwitchBoardModel(slotCount) {
     }
 }
 
-function removeFirstCanvers() {
+function removeFirstCanvas() {
     document.querySelector('canvas').remove();
 }
 
@@ -64,16 +64,18 @@ STLModelFiles[2] = initialSwitchBoardModel;
 const slotCountSelect = document.getElementById('slot-count');
 slotCountSelect.addEventListener('change', function () {
     // 생성되어있는 캔버스 제거
-    removeFirstCanvers();
+    removeFirstCanvas();
 
     const selectedSlotCount = parseInt(this.value);
     const selectedSwitchBoardModel = selectSwitchBoardModel(selectedSlotCount);
     STLModelFiles[2] = selectedSwitchBoardModel;
 
+    // 키캡을 슬롯 수에 맞게 조정
+    adjustKeycaps(selectedSlotCount);
+
     // 변경된 모델 로드
     STLViewer(STLModelFiles, "model");
 });
-
 
 /**
  * 각 트레이에 대응하는 메쉬를 저장한다.
@@ -201,16 +203,18 @@ function STLViewer(models, elementID) {
     scene.add(group);
 
     models.forEach((model, index) => {
-        new STLLoader().load(model, function (geometry) {
-            const material = new THREE.MeshPhongMaterial({ color: 0xffffff, specular: 100, shininess: 100 });
-            const mesh = new THREE.Mesh(geometry, material);
-            group.add(mesh);
-            meshes[index] = mesh;
+        if (model) {
+            new STLLoader().load(model, function (geometry) {
+                const material = new THREE.MeshPhongMaterial({ color: 0xffffff, specular: 100, shininess: 100 });
+                const mesh = new THREE.Mesh(geometry, material);
+                group.add(mesh);
+                meshes[index] = mesh;
 
-            setPosition(mesh, geometry, index);
-            camera.position.z = 25;
-            animate(renderer, scene, camera, controls);
-        });
+                setPosition(mesh, geometry, index);
+                camera.position.z = 25;
+                animate(renderer, scene, camera, controls);
+            });
+        }
     });
 }
 
@@ -284,4 +288,24 @@ function setMaterial(parent, mtl) {
             o.material = mtl;
         }
     });
+}
+
+/**
+ * 슬롯 수에 따라 키캡을 조정한다.
+ * @param {number} slotCount - 선택된 슬롯 수
+ */
+function adjustKeycaps(slotCount) {
+    // 현재 키캡 인덱스를 초기화
+    let keycapIndex = 1; // STLModelFiles에서 키캡은 1부터 시작
+
+    // 키캡을 초기화
+    for (let i = 1; i <= 5; i++) {
+        STLModelFiles[i + 1] = ""; // 모든 키캡을 비운다
+    }
+
+    // 선택된 슬롯 수만큼 키캡을 할당
+    for (let i = 0; i < slotCount - 1; i++) {
+        STLModelFiles[keycapIndex + 1] = "./models/keycap.stl";
+        keycapIndex++;
+    }
 }
