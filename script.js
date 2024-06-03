@@ -29,7 +29,11 @@ const STLModelFiles = [
     "./models/text/upper_F.stl"
 ];
 
-// 스위치보드 모델 파일 경로를 선택하는 함수
+/**
+ * 주어진 슬롯 수에 맞는 스위치보드 모델 파일 경로를 반환한다.
+ * @param {number} slotCount - 슬롯 수
+ * @returns {string} 스위치보드 모델 파일 경로
+ */
 function selectSwitchBoardModel(slotCount) {
     switch (slotCount) {
         case 2:
@@ -51,6 +55,9 @@ function selectSwitchBoardModel(slotCount) {
     }
 }
 
+/**
+ * 첫 번째 캔버스를 제거한다.
+ */
 function removeFirstCanvas() {
     document.querySelector('canvas').remove();
 }
