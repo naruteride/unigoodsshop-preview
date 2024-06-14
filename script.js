@@ -67,22 +67,22 @@ let initialSlotCount = 4; // 기본값은 4
 let initialSwitchBoardModel = selectSwitchBoardModel(initialSlotCount);
 STLModelFiles[2] = initialSwitchBoardModel;
 
-// 슬롯 수를 선택하는 select 요소와 그 값을 처리하는 부분
-const slotCountSelect = document.getElementById('slot-count');
-slotCountSelect.addEventListener('change', function () {
-    // 생성되어있는 캔버스 제거
-    removeFirstCanvas();
+// // 슬롯 수를 선택하는 select 요소와 그 값을 처리하는 부분
+// const slotCountSelect = document.getElementById('slot-count');
+// slotCountSelect.addEventListener('change', function () {
+//     // 생성되어있는 캔버스 제거
+//     removeFirstCanvas();
 
-    const selectedSlotCount = parseInt(this.value);
-    const selectedSwitchBoardModel = selectSwitchBoardModel(selectedSlotCount);
-    STLModelFiles[2] = selectedSwitchBoardModel;
+//     const selectedSlotCount = parseInt(this.value);
+//     const selectedSwitchBoardModel = selectSwitchBoardModel(selectedSlotCount);
+//     STLModelFiles[2] = selectedSwitchBoardModel;
 
-    // 키캡을 슬롯 수에 맞게 조정
-    adjustKeycaps(selectedSlotCount);
+//     // 키캡을 슬롯 수에 맞게 조정
+//     adjustKeycaps(selectedSlotCount);
 
-    // 변경된 모델 로드
-    STLViewer(STLModelFiles, "model");
-});
+//     // 변경된 모델 로드
+//     STLViewer(STLModelFiles, "model");
+// });
 
 /**
  * 각 트레이에 대응하는 메쉬를 저장한다.
